@@ -7,9 +7,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from streamlit import session_state
 from sklearn.impute import SimpleImputer
+import streamlit.components.v1 as components
 
-
-class SubscriptionManager:
+# Include Google Analytics tracking code
+with open("google_analytics.html", "r") as f:
+    html_code = f.read()
+    components.html(html_code, height=0)
+    class SubscriptionManager:
     def __init__(self):
         # Simulate a database of users and their subscription status
         self.users = {}
