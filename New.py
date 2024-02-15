@@ -7,11 +7,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from streamlit import session_state
 from sklearn.impute import SimpleImputer
-import streamlit.components.v1 as components
+from streamlit.report_thread import get_report_ctx
+from streamlit.server.server import Server
+import time
+import requests
 
 class SubscriptionManager:
-        def __init__(self):
-            self.users = {}
+    def __init__(self):
+        # Simulate a database of users and their subscription status
+        self.users = {}
 
     def is_subscribed(self, user):
         return self.users.get(user, False)
@@ -36,8 +40,7 @@ scatterplot_data = None
 def main():
     init_session_state()
 
-    st.title("SoftGrow")
-    st.write("SoftGrow Data Visualization!") 
+    st.title("Advanced Scatterplot Analysis")
 
     # Initialize subscription manager
     subscription_manager = SubscriptionManager()
