@@ -7,30 +7,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from streamlit import session_state
 from sklearn.impute import SimpleImputer
-from streamlit.report_thread import get_report_ctx
-from streamlit.server.server import Server
-import time
-import requests
-
-class SubscriptionManager:
-    def __init__(self):
-        # Simulate a database of users and their subscription status
-        self.users = {}
-
-    def is_subscribed(self, user):
-        return self.users.get(user, False)
-
-    def subscribe(self, user, plan):
-        # Implement the subscription logic here, e.g., integrate with a payment system
-        # For simplicity, we're just storing the subscription status in-memory
-        self.users[user] = True
-
-
-# Initialize session state
-def init_session_state():
-    if "user_email" not in session_state:
-        session_state.user_email = None
-
 
 # Scatterplot data placeholder
 scatterplot_data = None
