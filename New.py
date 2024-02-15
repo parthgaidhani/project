@@ -130,39 +130,27 @@ def main():
                         raise ValueError("Unsupported file type. Please upload a CSV or Excel file.")
                         
                         return df
-
-
-# Generate scatterplot using Plotly
-def generate_scatterplot(data, color_column=None, size_column=None):
-    fig = px.scatter(
-        data,
-        x=data.columns[0],
-        y=data.columns[1],
-        color=color_column,
-        size=size_column,
-        labels={data.columns[0]: "X-axis", data.columns[1]: "Y-axis"},
-    )
-    return fig
-
-
-# Generate heatmap for numeric data
-def generate_heatmap(data, column):
-    # Exclude non-numeric columns
-    numeric_columns = data.columns[
-        data.dtypes.apply(lambda c: pd.api.types.is_numeric_dtype(c))
-    ]
-    correlation_matrix = data[numeric_columns].corr()
-
-    fig = px.imshow(
-        correlation_matrix,
-        labels=dict(color="Correlation"),
-        color_continuous_scale="Viridis",
-    )
-    return fig
-
-
-# Generate bar chart for non-numeric data
-def generate_bar_chart(data, column):
+                        def generate_scatterplot(data, color_column=None, size_column=None):
+                            fig = px.scatter(
+                                data,
+                                x=data.columns[0],
+                                y=data.columns[1],
+                                color=color_column,
+                                size=size_column,
+                                labels={data.columns[0]: "X-axis", data.columns[1]: "Y-axis"},)
+                            return fig
+                            
+                            def generate_heatmap(data, column):
+                                # Exclude non-numeric columns
+                                numeric_columns = data.columns[data.dtypes.apply(lambda c: pd.api.types.is_numeric_dtype(c))]
+                                correlation_matrix = data[numeric_columns].corr()
+                                fig = px.imshow(
+                                    correlation_matrix,
+                                    labels=dict(color="Correlation"),
+                                    color_continuous_scale="Viridis",)
+                                return fig
+                                # Generate bar chart for non-numeric data
+    def generate_bar_chart(data, column):
     counts = data[column].value_counts()
     bar_chart_fig = px.bar(
         x=counts.index,
