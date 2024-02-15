@@ -15,8 +15,7 @@ with open("google_analytics.html", "r") as f:
     components.html(html_code, height=0)
     class SubscriptionManager:
         def __init__(self):
-        # Simulate a database of users and their subscription status
-        self.users = {}
+            self.users = {}
 
     def is_subscribed(self, user):
         return self.users.get(user, False)
