@@ -18,12 +18,6 @@ def main():
 
     st.title("Advanced Scatterplot Analysis")
 
-    # Initialize subscription manager
-    subscription_manager = SubscriptionManager()
-
-    # Assume the user is subscribed
-    st.success("You are subscribed! You can access premium features.")
-
     st.sidebar.header("User Input")
     data_file = st.sidebar.file_uploader(
         "Upload Data File (CSV, Excel)"
@@ -127,11 +121,6 @@ def main():
                 )
                 st.plotly_chart(custom_scatterplot_fig)
 
-            # Payment Link
-            st.markdown("Proceed to Payment")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
 
 
 # Process data file and return DataFrame
@@ -223,7 +212,7 @@ def generate_linear_regression_plot(data, selected_columns):
     y = data[selected_columns[1]].values.reshape(-1, 1)
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
+        X, y, test_size=0.9, random_state=42
     )
 
     model = LinearRegression()
