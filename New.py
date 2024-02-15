@@ -120,19 +120,16 @@ def main():
                     scatterplot_data[selected_columns], color_column, size_column
                 )
                 st.plotly_chart(custom_scatterplot_fig)
-
-
-
-# Process data file and return DataFrame
-def process_data_file(data_file):
-    if data_file.type == "application/vnd.ms-excel":
-        df = pd.read_excel(data_file)
-    elif data_file.type == "text/csv":
-        df = pd.read_csv(data_file)
-    else:
-        raise ValueError("Unsupported file type. Please upload a CSV or Excel file.")
-
-    return df
+                
+                def process_data_file(data_file):
+                    if data_file.type == "application/vnd.ms-excel":
+                        df = pd.read_excel(data_file)
+                    elif data_file.type == "text/csv":
+                        df = pd.read_csv(data_file)
+                    else:
+                        raise ValueError("Unsupported file type. Please upload a CSV or Excel file.")
+                        
+                        return df
 
 
 # Generate scatterplot using Plotly
