@@ -149,72 +149,60 @@ def main():
                                     labels=dict(color="Correlation"),
                                     color_continuous_scale="Viridis",)
                                 return fig
-                                # Generate bar chart for non-numeric data
-    def generate_bar_chart(data, column):
-    counts = data[column].value_counts()
-    bar_chart_fig = px.bar(
-        x=counts.index,
-        y=counts.values,
-        labels={column: "Count", "index": column},
-        title=f"Counts of {column}",
-    )
-    return bar_chart_fig
+                                def generate_bar_chart(data, column):
+                                    counts = data[column].value_counts()
+                                    bar_chart_fig = px.bar(
+                                        x=counts.index,
+                                        y=counts.values,
+                                        labels={column: "Count", "index": column},
+                                        title=f"Counts of {column}",)
+                                    return bar_chart_fig
+                                    def generate_time_series_plot(data):
+                                        time_series_fig = px.line(
+                                        data,
+                                        x=data.columns[0],
+                                        y=data.columns[1],
+                                        labels={data.columns[0]: "Time", data.columns[1]: "Value"},)
+                                        return time_series_fig
 
 
-# Generate time series plot using Plotly Express
-def generate_time_series_plot(data):
-    time_series_fig = px.line(
-        data,
-        x=data.columns[0],
-        y=data.columns[1],
-        labels={data.columns[0]: "Time", data.columns[1]: "Value"},
-    )
-    return time_series_fig
+                                       # Generate box plot using Plotly Express
+                                      def generate_box_plot(data, color_column):
+                                                    box_plot_fig = px.box(
+                                                     data,
+                                                     x=color_column,
+                                                     y=data.columns[1],
+                                                      color=color_column,
+                                                      labels={data.columns[1]: "Numerical Value"},)
+                                                     return box_plot_fig
 
 
-# Generate box plot using Plotly Express
-def generate_box_plot(data, color_column):
-    box_plot_fig = px.box(
-        data,
-        x=color_column,
-        y=data.columns[1],
-        color=color_column,
-        labels={data.columns[1]: "Numerical Value"},
-    )
-    return box_plot_fig
+                                                    def generate_linear_regression_plot(data, selected_columns):
+                                                       # Simple Linear Regression
 
+                                                                  # Check for missing values
+                                                                     if data[selected_columns].isnull().any().any():
+                                                                                # Handle missing values using SimpleImputer
+                                                                                 imputer = SimpleImputer(strategy="mean")
+                                                                                 data[selected_columns] = imputer.fit_transform(data[selected_columns])
 
-def generate_linear_regression_plot(data, selected_columns):
-    # Simple Linear Regression
+                                                                                 X = data[selected_columns[0]].values.reshape(-1, 1)
+                                                                                 y = data[selected_columns[1]].values.reshape(-1, 1)
 
-    # Check for missing values
-    if data[selected_columns].isnull().any().any():
-        # Handle missing values using SimpleImputer
-        imputer = SimpleImputer(strategy="mean")
-        data[selected_columns] = imputer.fit_transform(data[selected_columns])
+                                                                                 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.9, random_state=42)
 
-    X = data[selected_columns[0]].values.reshape(-1, 1)
-    y = data[selected_columns[1]].values.reshape(-1, 1)
+                                                                               model = LinearRegression()
+                                                                               model.fit(X_train, y_train)
+                                                                               y_pred = model.predict(X_test)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.9, random_state=42
-    )
+                                                                              mse = mean_squared_error(y_test, y_pred)
 
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
+                                                                            # Scatterplot
+                                                                            scatter_fig = generate_scatterplot(data, selected_columns[0], selected_columns[1])
 
-    mse = mean_squared_error(y_test, y_pred)
-
-    # Scatterplot
-    scatter_fig = generate_scatterplot(data, selected_columns[0], selected_columns[1])
-
-    # Regression Line
-    regression_line = go.Scatter(
-        x=X_test.flatten(), y=y_pred.flatten(), mode="lines", name="Regression Line"
-    )
-
-    linear_regression_fig = go.Figure(data=[scatter_fig.data[0], regression_line])
+                                                                            # Regression Line
+                                                                            regression_line = go.Scatter(x=X_test.flatten(), y=y_pred.flatten(), mode="lines", name="Regression Line")
+linear_regression_fig = go.Figure(data=[scatter_fig.data[0], regression_line])
 
     linear_regression_fig.update_layout(
         title=f"Linear Regression (MSE: {mse:.2f})",
