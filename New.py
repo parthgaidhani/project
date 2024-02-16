@@ -8,6 +8,27 @@ from sklearn.metrics import mean_squared_error
 from streamlit import session_state
 from sklearn.impute import SimpleImputer
 
+
+class SubscriptionManager:
+    def __init__(self):
+        # Simulate a database of users and their subscription status
+        self.users = {}
+
+    def is_subscribed(self, user):
+        return self.users.get(user, False)
+
+    def subscribe(self, user, plan):
+        # Implement the subscription logic here, e.g., integrate with a payment system
+        # For simplicity, we're just storing the subscription status in-memory
+        self.users[user] = True
+
+
+# Initialize session state
+def init_session_state():
+    if "user_email" not in session_state:
+        session_state.user_email = None
+
+
 # Scatterplot data placeholder
 scatterplot_data = None
 
@@ -17,6 +38,12 @@ def main():
     init_session_state()
 
     st.title("Advanced Scatterplot Analysis")
+
+    # Initialize subscription manager
+    subscription_manager = SubscriptionManager()
+
+    # Assume the user is subscribed
+    st.success("You are subscribed! You can access premium features.")
 
     st.sidebar.header("User Input")
     data_file = st.sidebar.file_uploader(
@@ -120,89 +147,121 @@ def main():
                     scatterplot_data[selected_columns], color_column, size_column
                 )
                 st.plotly_chart(custom_scatterplot_fig)
-                
-                def process_data_file(data_file):
-                    if data_file.type == "application/vnd.ms-excel":
-                        df = pd.read_excel(data_file)
-                    elif data_file.type == "text/csv":
-                        df = pd.read_csv(data_file)
-                    else:
-                        raise ValueError("Unsupported file type. Please upload a CSV or Excel file.")
-                        
-                        return df
-                        def generate_scatterplot(data, color_column=None, size_column=None):
-                            fig = px.scatter(
-                                data,
-                                x=data.columns[0],
-                                y=data.columns[1],
-                                color=color_column,
-                                size=size_column,
-                                labels={data.columns[0]: "X-axis", data.columns[1]: "Y-axis"},)
-                            return fig
-                            
-                            def generate_heatmap(data, column):
-                                # Exclude non-numeric columns
-                                numeric_columns = data.columns[data.dtypes.apply(lambda c: pd.api.types.is_numeric_dtype(c))]
-                                correlation_matrix = data[numeric_columns].corr()
-                                fig = px.imshow(
-                                    correlation_matrix,
-                                    labels=dict(color="Correlation"),
-                                    color_continuous_scale="Viridis",)
-                                return fig
-                                def generate_bar_chart(data, column):
-                                    counts = data[column].value_counts()
-                                    bar_chart_fig = px.bar(
-                                        x=counts.index,
-                                        y=counts.values,
-                                        labels={column: "Count", "index": column},
-                                        title=f"Counts of {column}",)
-                                    return bar_chart_fig
-                                    def generate_time_series_plot(data):
-                                        time_series_fig = px.line(
-                                        data,
-                                        x=data.columns[0],
-                                        y=data.columns[1],
-                                        labels={data.columns[0]: "Time", data.columns[1]: "Value"},)
-                                        return time_series_fig
+
+            # Payment Link
+            st.markdown("Proceed to Payment")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
 
 
-                                       # Generate box plot using Plotly Express
-                                      def generate_box_plot(data, color_column):
-                                                    box_plot_fig = px.box(
-                                                     data,
-                                                     x=color_column,
-                                                     y=data.columns[1],
-                                                      color=color_column,
-                                                      labels={data.columns[1]: "Numerical Value"},)
-                                                     return box_plot_fig
+# Process data file and return DataFrame
+def process_data_file(data_file):
+    if data_file.type == "application/vnd.ms-excel":
+        df = pd.read_excel(data_file)
+    elif data_file.type == "text/csv":
+        df = pd.read_csv(data_file)
+    else:
+        raise ValueError("Unsupported file type. Please upload a CSV or Excel file.")
+
+    return df
 
 
-                                                    def generate_linear_regression_plot(data, selected_columns):
-                                                       # Simple Linear Regression
+# Generate scatterplot using Plotly
+def generate_scatterplot(data, color_column=None, size_column=None):
+    fig = px.scatter(
+        data,
+        x=data.columns[0],
+        y=data.columns[1],
+        color=color_column,
+        size=size_column,
+        labels={data.columns[0]: "X-axis", data.columns[1]: "Y-axis"},
+    )
+    return fig
 
-                                                                  # Check for missing values
-                                                                     if data[selected_columns].isnull().any().any():
-                                                                                # Handle missing values using SimpleImputer
-                                                                                 imputer = SimpleImputer(strategy="mean")
-                                                                                 data[selected_columns] = imputer.fit_transform(data[selected_columns])
 
-                                                                                 X = data[selected_columns[0]].values.reshape(-1, 1)
-                                                                                 y = data[selected_columns[1]].values.reshape(-1, 1)
+# Generate heatmap for numeric data
+def generate_heatmap(data, column):
+    # Exclude non-numeric columns
+    numeric_columns = data.columns[
+        data.dtypes.apply(lambda c: pd.api.types.is_numeric_dtype(c))
+    ]
+    correlation_matrix = data[numeric_columns].corr()
 
-                                                                                 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.9, random_state=42)
+    fig = px.imshow(
+        correlation_matrix,
+        labels=dict(color="Correlation"),
+        color_continuous_scale="Viridis",
+    )
+    return fig
 
-                                                                               model = LinearRegression()
-                                                                               model.fit(X_train, y_train)
-                                                                               y_pred = model.predict(X_test)
 
-                                                                              mse = mean_squared_error(y_test, y_pred)
+# Generate bar chart for non-numeric data
+def generate_bar_chart(data, column):
+    counts = data[column].value_counts()
+    bar_chart_fig = px.bar(
+        x=counts.index,
+        y=counts.values,
+        labels={column: "Count", "index": column},
+        title=f"Counts of {column}",
+    )
+    return bar_chart_fig
 
-                                                                            # Scatterplot
-                                                                            scatter_fig = generate_scatterplot(data, selected_columns[0], selected_columns[1])
 
-                                                                            # Regression Line
-                                                                            regression_line = go.Scatter(x=X_test.flatten(), y=y_pred.flatten(), mode="lines", name="Regression Line")
-linear_regression_fig = go.Figure(data=[scatter_fig.data[0], regression_line])
+# Generate time series plot using Plotly Express
+def generate_time_series_plot(data):
+    time_series_fig = px.line(
+        data,
+        x=data.columns[0],
+        y=data.columns[1],
+        labels={data.columns[0]: "Time", data.columns[1]: "Value"},
+    )
+    return time_series_fig
+
+
+# Generate box plot using Plotly Express
+def generate_box_plot(data, color_column):
+    box_plot_fig = px.box(
+        data,
+        x=color_column,
+        y=data.columns[1],
+        color=color_column,
+        labels={data.columns[1]: "Numerical Value"},
+    )
+    return box_plot_fig
+
+
+def generate_linear_regression_plot(data, selected_columns):
+    # Simple Linear Regression
+
+    # Check for missing values
+    if data[selected_columns].isnull().any().any():
+        # Handle missing values using SimpleImputer
+        imputer = SimpleImputer(strategy="mean")
+        data[selected_columns] = imputer.fit_transform(data[selected_columns])
+
+    X = data[selected_columns[0]].values.reshape(-1, 1)
+    y = data[selected_columns[1]].values.reshape(-1, 1)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+
+    mse = mean_squared_error(y_test, y_pred)
+
+    # Scatterplot
+    scatter_fig = generate_scatterplot(data, selected_columns[0], selected_columns[1])
+
+    # Regression Line
+    regression_line = go.Scatter(
+        x=X_test.flatten(), y=y_pred.flatten(), mode="lines", name="Regression Line"
+    )
+
+    linear_regression_fig = go.Figure(data=[scatter_fig.data[0], regression_line])
 
     linear_regression_fig.update_layout(
         title=f"Linear Regression (MSE: {mse:.2f})",
