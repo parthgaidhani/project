@@ -8,17 +8,7 @@ from sklearn.metrics import mean_squared_error
 from streamlit import session_state
 from sklearn.impute import SimpleImputer
 
-GA_ID = "G-61D24JSQ6W"
-GA_SCRIPT = """
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-61D24JSQ6W"></script>
-<script id='google_analytics'>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-61D24JSQ6W');
-</script>
-"""
+
 
 
 # Initialize session state
