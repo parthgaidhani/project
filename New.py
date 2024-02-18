@@ -8,18 +8,17 @@ from sklearn.metrics import mean_squared_error
 from streamlit import session_state
 from sklearn.impute import SimpleImputer
 
-GA_TRACKING_ID = 'G-61D24JSQ6W'  # Replace with your Google Analytics tracking ID
-st.markdown(f"""
+GA_ID = "google_analytics"
+GA_SCRIPT = """
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-61D24JSQ6W"></script>
-<script>
+<script id='google_analytics'>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-61D24JSQ6W');
 </script>
-                  """, unsafe_allow_html=True)
+"""
 
 
 # Initialize session state
