@@ -8,19 +8,18 @@ from sklearn.metrics import mean_squared_error
 from streamlit import session_state
 from sklearn.impute import SimpleImputer
 
+GA_TRACKING_ID = 'G-61D24JSQ6W'  # Replace with your Google Analytics tracking ID
+st.markdown(f"""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-61D24JSQ6W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-class SubscriptionManager:
-    def __init__(self):
-        # Simulate a database of users and their subscription status
-        self.users = {}
-
-    def is_subscribed(self, user):
-        return self.users.get(user, False)
-
-    def subscribe(self, user, plan):
-        # Implement the subscription logic here, e.g., integrate with a payment system
-        # For simplicity, we're just storing the subscription status in-memory
-        self.users[user] = True
+  gtag('config', 'G-61D24JSQ6W');
+</script>
+                  """, unsafe_allow_html=True)
 
 
 # Initialize session state
