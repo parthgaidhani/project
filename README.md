@@ -9,4 +9,4 @@ You want to visualize your data like this?
 ![newplot](https://github.com/parthgaidhani/project/assets/148692764/b390eb16-cc07-4309-aec9-012501641666)
 
  For this beautiful visualization.. 
- Click this link  :- https://softgrow-cloud.streamlit.app/
+ Click this link  :- https://softgrow.streamlit.app/
