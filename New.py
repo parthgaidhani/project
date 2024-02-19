@@ -8,22 +8,8 @@ from sklearn.metrics import mean_squared_error
 from streamlit import session_state
 from sklearn.impute import SimpleImputer
 
-def google_analytics_html():
-    # Replace 'UA-XXXXXXXXX-X' with your own Google Analytics tracking ID
-    google_tag_html = """
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61D24JSQ6W"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'G-61D24JSQ6W');
-    </script>
-    """
-    return google_tag_html
 
-st.write(google_analytics_html(), unsafe_allow_html=True)
 
 
 # Initialize session state
