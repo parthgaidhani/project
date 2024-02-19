@@ -11,18 +11,16 @@ from sklearn.impute import SimpleImputer
 
 def google_analytics_html():
     # Replace 'UA-XXXXXXXXX-X' with your own Google Analytics tracking ID
-    tracking_id = 'G-61D24JSQ6W'
-    return f"""
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={G-61D24JSQ6W}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){{dataLayer.push(arguments);}}
-      gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-61D24JSQ6W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-      gtag('config', '{G-61D24JSQ6W}');
-    </script>
-    """
+  gtag('config', 'G-61D24JSQ6W');
+</script>
+    
 
 st.write(google_analytics_html(), unsafe_allow_html=True)
 
