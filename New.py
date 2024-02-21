@@ -44,14 +44,17 @@ def main():
             global scatterplot_data
             scatterplot_data = process_data_file(data_file)
 
+             # Data Exploration
+            st.subheader("Data Exploration")
+            st.write(scatterplot_data.describe())
+
+            
             # Display scatterplot
             st.subheader("Scatterplot")
             scatterplot_fig = generate_scatterplot(scatterplot_data)
             st.plotly_chart(scatterplot_fig)
 
-            # Data Exploration
-            st.subheader("Data Exploration")
-            st.write(scatterplot_data.describe())
+         
 
             # Heatmap or Bar chart based on column types
             st.subheader("Correlation/Counts Visualization")
