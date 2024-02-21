@@ -27,9 +27,8 @@ def main():
     init_session_state()
 
     st.title("SoftGrow")
-
+    st.write("Your data visualization ")
   
-
     st.sidebar.header("User Input")
     data_file = st.sidebar.file_uploader(
         "Upload Data File (CSV, Excel)"
