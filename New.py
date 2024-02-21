@@ -26,7 +26,7 @@ scatterplot_data = None
 def main():
     init_session_state()
 
-    st.title("Advanced Scatterplot Analysis")
+    st.title("SoftGrow")
 
   
 
