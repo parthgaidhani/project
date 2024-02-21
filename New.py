@@ -28,11 +28,7 @@ def main():
 
     st.title("Advanced Scatterplot Analysis")
 
-    # Initialize subscription manager
-    subscription_manager = SubscriptionManager()
-
-    # Assume the user is subscribed
-    st.success("You are subscribed! You can access premium features.")
+  
 
     st.sidebar.header("User Input")
     data_file = st.sidebar.file_uploader(
