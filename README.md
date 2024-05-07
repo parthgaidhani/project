@@ -7,6 +7,7 @@ You want to visualize your data like this?
 ![newplot (2)](https://github.com/parthgaidhani/project/assets/148692764/21ce985b-7be6-41a8-937b-50106be5acce)
 ![newplot (1)](https://github.com/parthgaidhani/project/assets/148692764/efdf2160-0f21-49d8-a9a6-4881e386f628)
 ![newplot](https://github.com/parthgaidhani/project/assets/148692764/b390eb16-cc07-4309-aec9-012501641666)
+blob:https://softgrow.streamlit.app/55e98dc1-b8db-4e8f-80c6-e0036d590f80
 
  For this beautiful visualization.. 
  Click this link  :- https://softgrow.streamlit.app/
