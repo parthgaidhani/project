@@ -257,6 +257,7 @@ def generate_linear_regression_plot(data, selected_columns):
     )
 
     return linear_regression_fig
+    st.write("Follow me on my Linkedin:- linkedin.com/in/parth-gaidhani-192614309")
 
 
 if __name__ == "__main__":
