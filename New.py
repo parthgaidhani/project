@@ -33,6 +33,8 @@ def main():
     data_file = st.sidebar.file_uploader(
         "Upload Data File (CSV, Excel)"
     )
+    
+    st.write("Follow me on my Linkedin:- linkedin.com/in/parth-gaidhani-192614309")
 
     if data_file is not None:
         st.sidebar.markdown("File Uploaded Successfully!")
@@ -257,7 +259,6 @@ def generate_linear_regression_plot(data, selected_columns):
     )
 
     return linear_regression_fig
-    st.write("Follow me on my Linkedin:- linkedin.com/in/parth-gaidhani-192614309")
 
 
 if __name__ == "__main__":
