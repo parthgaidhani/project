@@ -34,7 +34,7 @@ def main():
         "Upload Data File (CSV, Excel)"
     )
     
-    st.write("Follow me on my Linkedin:- linkedin.com/in/parth-gaidhani-192614309")
+    st.write("Follow me on my Linkedin":- linkedin.com/in/parth-gaidhani-192614309)
 
     if data_file is not None:
         st.sidebar.markdown("File Uploaded Successfully!")
