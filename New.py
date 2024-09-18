@@ -9,7 +9,8 @@ from streamlit import session_state
 from sklearn.impute import SimpleImputer
 
 
-
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9793004179580748"
+     crossorigin="anonymous"></script>
 
 
 # Initialize session state
