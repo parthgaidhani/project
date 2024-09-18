@@ -15,7 +15,14 @@ def init_session_state():
 
 # Scatterplot data placeholder
 scatterplot_data = None
-
+ st.markdown(
+        """
+        <iframe async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9793004179580748"
+        width="100%" height="100" frameborder="0" style="border:0;" scrolling="no" crossorigin="anonymous">
+        </iframe>
+        """,
+        unsafe_allow_html=True
+    )
 # Main page
 def main():
     init_session_state()
