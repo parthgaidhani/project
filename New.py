@@ -13,9 +13,6 @@ def init_session_state():
     if "user_email" not in session_state:
         session_state.user_email = None
 
-# Scatterplot data placeholder
-scatterplot_data = None
-
 # Main page
 def main():
     init_session_state()
@@ -30,8 +27,10 @@ def main():
         st.sidebar.markdown(f"**File Uploaded:** {data_file.name}")
 
         try:
-            global scatterplot_data
             scatterplot_data = process_data_file(data_file)
+
+            # Basic Data Cleaning (Optional)
+            scatterplot_data.dropna(inplace=True)  # Remove rows with missing values
 
             # Data Exploration
             st.subheader("Data Exploration")
@@ -40,7 +39,7 @@ def main():
             # Scatterplot
             st.subheader("Scatterplot")
             scatterplot_fig = generate_scatterplot(scatterplot_data)
-            st.plotly_chart(scatterplot_fig)
+            st.plotly_chart(scatterplot_fig, key="scatterplot") 
 
             # Correlation/Counts Visualization
             st.subheader("Correlation/Counts Visualization")
@@ -48,22 +47,22 @@ def main():
                 if pd.api.types.is_numeric_dtype(scatterplot_data[column]):
                     st.write(f"**{column} (Numeric)**")
                     heatmap_fig = generate_heatmap(scatterplot_data)
-                    st.plotly_chart(heatmap_fig)
+                    st.plotly_chart(heatmap_fig, key=f"heatmap_{column}") 
                 else:
                     st.write(f"**{column} (Non-Numeric)**")
                     bar_chart_fig = generate_bar_chart(scatterplot_data, column)
-                    st.plotly_chart(bar_chart_fig)
+                    st.plotly_chart(bar_chart_fig, key=f"barchart_{column}") 
 
             # Pair Plot
             st.subheader("Pair Plot")
             pair_plot_fig = px.scatter_matrix(scatterplot_data)
-            st.plotly_chart(pair_plot_fig)
+            st.plotly_chart(pair_plot_fig, key="pair_plot")
 
             # Histograms
             st.subheader("Histograms")
             for column in scatterplot_data.columns:
                 histogram_fig = px.histogram(scatterplot_data, x=column, title=f"Histogram of {column}")
-                st.plotly_chart(histogram_fig)
+                st.plotly_chart(histogram_fig, key=f"histogram_{column}")
 
             # 3D Scatter Plot
             if len(scatterplot_data.columns) >= 3:
@@ -74,22 +73,22 @@ def main():
                     y=scatterplot_data.columns[1],
                     z=scatterplot_data.columns[2]
                 )
-                st.plotly_chart(scatterplot_3d_fig)
+                st.plotly_chart(scatterplot_3d_fig, key="scatterplot_3d")
 
             # Time Series Plot (Showing Trends)
             st.subheader("Time Series Plot")
             time_series_fig = generate_time_series_plot(scatterplot_data)
-            st.plotly_chart(time_series_fig)
+            st.plotly_chart(time_series_fig, key="time_series_plot")
 
             # Box Plot (Numerical vs. Categorical)
             st.subheader("Box Plot")
             box_plot_fig = generate_box_plot(scatterplot_data)
-            st.plotly_chart(box_plot_fig)
+            st.plotly_chart(box_plot_fig, key="box_plot")
 
             # Linear Regression
             st.subheader("Linear Regression")
             linear_regression_fig = generate_linear_regression_plot(scatterplot_data)
-            st.plotly_chart(linear_regression_fig)
+            st.plotly_chart(linear_regression_fig, key="linear_regression")
 
             # Interactive Controls
             st.sidebar.subheader("Interactive Controls")
@@ -97,7 +96,7 @@ def main():
             if selected_columns:
                 st.subheader("Custom Scatterplot")
                 custom_scatterplot_fig = generate_scatterplot(scatterplot_data[selected_columns])
-                st.plotly_chart(custom_scatterplot_fig)
+                st.plotly_chart(custom_scatterplot_fig, key="custom_scatterplot")
 
             st.markdown("Proceed to Payment")
         except Exception as e:
@@ -105,13 +104,17 @@ def main():
 
 # Process data file and return DataFrame
 def process_data_file(data_file):
-    if data_file.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-        df = pd.read_excel(data_file)
-    elif data_file.type == "text/csv":
-        df = pd.read_csv(data_file)
-    else:
-        raise ValueError("Unsupported file type. Please upload a CSV or Excel file.")
-    return df
+    try:
+        if data_file.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            df = pd.read_excel(data_file)
+        elif data_file.type == "text/csv":
+            df = pd.read_csv(data_file)
+        else:
+            raise ValueError("Unsupported file type. Please upload a CSV or Excel file.")
+        return df
+    except Exception as e:
+        st.error(f"Error reading data file: {e}")
+        return None
 
 # Generate scatterplot using Plotly
 def generate_scatterplot(data, color_column=None, size_column=None):
@@ -133,8 +136,19 @@ def generate_bar_chart(data, column):
 
 # Generate time series plot using Plotly
 def generate_time_series_plot(data):
-    fig = px.line(data, x=data.columns[0], y=data.columns[1], labels={data.columns[0]: "Time", data.columns[1]: "Value"})
-    return fig
+    try:
+        # Attempt to find a suitable date/time column
+        date_columns = data.select_dtypes(include=['datetime64[ns]', 'datetime64[ns, UTC]']).columns
+        if len(date_columns) > 0:
+            x_col = date_columns[0]
+        else:
+            x_col = data.columns[0]  # Use the first column as a fallback
+
+        fig = px.line(data, x=x_col, y=data.columns[1], labels={x_col: "Time", data.columns[1]: "Value"})
+        return fig
+    except Exception as e:
+        st.error(f"Error generating time series plot: {e}")
+        return None
 
 # Generate box plot
 def generate_box_plot(data):
@@ -151,7 +165,6 @@ def generate_linear_regression_plot(data):
 
     X = data[selected_columns[0]].values.reshape(-1, 1)
     y = data[selected_columns[1]].values.reshape(-1, 1)
-
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     model = LinearRegression()
     model.fit(X_train, y_train)
@@ -167,4 +180,3 @@ def generate_linear_regression_plot(data):
 
 if __name__ == "__main__":
     main()
-
